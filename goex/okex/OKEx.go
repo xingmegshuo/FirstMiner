@@ -55,7 +55,6 @@ func (ok *OKEx) DoRequest(httpMethod, uri, reqBody string, response interface{})
 	url := ok.config.Endpoint + uri
 	sign, timestamp := ok.doParamSign(httpMethod, uri, reqBody)
 	//logger.Log.Debug("timestamp=", timestamp, ", sign=", sign)
-	// fmt.Println(fmt.Sprintf("%+v", ok.config))
 	resp, err := NewHttpRequest(ok.config.HttpClient, httpMethod, url, reqBody, map[string]string{
 		CONTENT_TYPE: APPLICATION_JSON_UTF8,
 		ACCEPT:       APPLICATION_JSON,

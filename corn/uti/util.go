@@ -9,19 +9,19 @@
 package util
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"strings"
-	"time"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "os"
+    "strings"
+    "time"
 
-	"zmyjobs/goex"
-	"zmyjobs/goex/builder"
+    "zmyjobs/goex"
+    "zmyjobs/goex/builder"
 
-	"github.com/shopspring/decimal"
-	"golang.org/x/net/proxy"
+    "github.com/shopspring/decimal"
+    "golang.org/x/net/proxy"
 )
 
 // Config 创建client需要的配置Struct
@@ -76,7 +76,7 @@ func NewFutrueApi(c *Config) (cli goex.FutureRestAPI) {
         // api.BuildFuture(goex.BINANCE) 期货api
         cli = api.BuildFuture(goex.BINANCE_SWAP)
     case "OKex":
-        api = builder.DefaultAPIBuilder.APIKey(c.APIKey).APISecretkey(c.Secreet).ClientID(c.ClientID).FuturesLever(c.Lever)
+        // api = builder.DefaultAPIBuilder.APIKey(c.APIKey).APISecretkey(c.Secreet).ClientID(c.ClientID).FuturesLever(c.Lever)
         cli = api.ApiPassphrase(c.Passhare).BuildFuture(goex.OKEX_SWAP)
     default:
         // 火币没有期货api
@@ -87,7 +87,7 @@ func NewFutrueApi(c *Config) (cli goex.FutureRestAPI) {
 
 // ProxySock socks5代理
 func ProxySock() *builder.APIBuilder {
-    cli := builder.NewCustomAPIBuilder(ProxyHttp("1124"))
+    cli := builder.NewCustomAPIBuilder(ProxyHttp("1123"))
     return cli
 }
 
