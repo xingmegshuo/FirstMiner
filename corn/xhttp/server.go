@@ -14,23 +14,23 @@
 package xhttp
 
 import (
-    "database/sql"
-    "encoding/json"
-    "fmt"
-    "io/ioutil"
-    "log"
-    "net/http"
-    "strings"
-    "time"
-    grid "zmyjobs/corn/grid"
-    model "zmyjobs/corn/models"
-    util "zmyjobs/corn/uti"
-    "zmyjobs/goex"
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strings"
+	"time"
+	grid "zmyjobs/corn/grid"
+	model "zmyjobs/corn/models"
+	util "zmyjobs/corn/uti"
+	"zmyjobs/goex"
 
-    "github.com/gorilla/mux"
-    "gorm.io/gorm"
+	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 
-    "github.com/shopspring/decimal"
+	"github.com/shopspring/decimal"
 )
 
 var INFO = "morning"
@@ -173,10 +173,10 @@ func GetAccountHandler(w http.ResponseWriter, r *http.Request) {
         if category == "" {
             category = "1"
         }
-        b, name, key, secret := model.GetApiConfig(model.ParseStringFloat(id), model.ParseStringFloat(category))
+        b, name, key, secret, pashare := model.GetApiConfig(model.ParseStringFloat(id), model.ParseStringFloat(category))
         // fmt.Println(b, name, key)
         if b {
-            c := grid.NewEx(&model.SymbolCategory{Category: name, Key: key, Secret: secret, PricePrecision: 8, AmountPrecision: 8, Host: "https://api.huobi.de.com"})
+            c := grid.NewEx(&model.SymbolCategory{Category: name, Key: key, Secret: secret, PricePrecision: 8, AmountPrecision: 8, Host: "https://api.huobi.de.com", Pashare: pashare})
             data, err := c.Ex.GetAccount()
             if err == nil {
                 response["status"] = "success"

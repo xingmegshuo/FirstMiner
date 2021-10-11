@@ -33,10 +33,11 @@ var l sync.Mutex
 func exitHandle() {
 	<-exitChan
 	fmt.Println("接收到信号")
-	
+
 	l.Lock()
 	job.Exit()
 	l.Unlock()
+	logs.EndLog()
 	logs.Log.Info("退出程序")
 
 	defer job.Exit()
@@ -57,10 +58,12 @@ func main() {
 	exitChan = make(chan os.Signal)
 	signal.Notify(exitChan, os.Interrupt, syscall.SIGTERM)
 	go exitHandle()
+
 	// go xhttp.RunServer()
 	// for i := 0; i < 1; i++ {
 	// 	go job.Begin()
 	// }
+
 	job.Init()
 	job.C.Start()
 	defer job.C.Stop()

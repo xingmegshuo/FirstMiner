@@ -116,7 +116,6 @@ func (bs *OKExSwap) ChangeLever(currency CurrencyPair, contractType string) bool
 	if err == nil && resp.BizWarmTips.Code == "0" {
 		return true
 	}
-	fmt.Println(err)
 	return false
 }
 
@@ -229,7 +228,6 @@ func (ok *OKExSwap) GetFutureUserinfo(currencyPair ...CurrencyPair) (*FutureAcco
 			AccountRights: ToFloat64(account.CashBal),
 		}
 	}
-
 	return &acc, nil
 }
 
@@ -325,7 +323,6 @@ func (ok *OKExSwap) PlaceFutureOrder2(currencyPair CurrencyPair, contractType, p
 		logger.Errorf("[param] %s", param)
 		return fOrder, errors.New(fmt.Sprintf("%s:%s", resp.BizWarmTips.Message, resp.BizWarmTips.Message))
 	}
-	fmt.Println(resp.Data[0].OrdId)
 	if resp.Data[0].OrdId == "" {
 		return nil, errors.New(fOrder.OrderID2 + "失败")
 	}
@@ -449,7 +446,6 @@ func (ok *OKExSwap) GetFutureOrder(orderId string, currencyPair CurrencyPair, co
 	contractType = ok.adaptContractType(currencyPair)
 
 	err := ok.DoRequest("GET", fmt.Sprintf(GET_ORDER, orderId, contractType), "", &resp)
-	fmt.Println(err)
 	if err != nil {
 		return nil, err
 	}
@@ -496,7 +492,6 @@ func (ok *OKExSwap) GetFutureOrder(orderId string, currencyPair CurrencyPair, co
 func (ok *OKExSwap) GetFuturePosition(currencyPair CurrencyPair, contractType string) ([]FuturePosition, error) {
 	var resp SwapPosition
 	contractType = ok.adaptContractType(currencyPair)
-
 	err := ok.DoRequest("GET", fmt.Sprintf(GET_POSITION, currencyPair.String()), "", &resp)
 	if err != nil {
 		return nil, err
