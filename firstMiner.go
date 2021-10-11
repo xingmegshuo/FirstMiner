@@ -10,12 +10,12 @@ package main
 
 import (
 	"fmt"
+	"os/signal"
+	"syscall"
 
 	"os"
-	"os/signal"
 	"runtime"
 	"sync"
-	"syscall"
 	"zmyjobs/corn/logs"
 	job "zmyjobs/corn/task"
 )
@@ -51,16 +51,19 @@ func exitHandle() {
  *@return       : / / ``
  */
 func main() {
+	logs.EndLog()
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	logs.NoneLog()
 	logs.Log.Println("what fuck")
 	exitChan = make(chan os.Signal)
 	signal.Notify(exitChan, os.Interrupt, syscall.SIGTERM)
 	go exitHandle()
+
 	// go xhttp.RunServer()
 	// for i := 0; i < 1; i++ {
 	// 	go job.Begin()
 	// }
+
 	job.Init()
 	job.C.Start()
 	defer job.C.Stop()

@@ -21,18 +21,18 @@ var (
 
 func UserJobRun() {
 	userData()
-	for i := 0; i < 1; i++ {
-		go model.NewUser()
-		go RunWG()
-	}
+	// for i := 0; i < 1; i++ {
+	// 	go model.NewUser()
+	// 	go RunWG()
+	// }
 }
 
 func userData() {
 	user.Count++
 	user.UpdateJob()
-	WriteCache("ZMYdb_task_order", time.Second*5)
-	WriteCache("ZMYdb_task_api", time.Hour)
-	WriteCache("ZMYdb_task_category", time.Hour)
+	WriteCache("TKXdb_task_order", time.Second*5)
+	WriteCache("TKXdb_task_api", time.Hour)
+	WriteCache("TKXdb_task_category", time.Hour)
 }
 
 // WriteCache mysql查询写入redis
@@ -41,11 +41,11 @@ func WriteCache(name string, t time.Duration) {
 	// if !model.CheckCache(name) {
 	var Data []map[string]interface{}
 	switch name {
-	case "ZMYdb_task_api":
+	case "TKXdb_task_api":
 		db.Raw("select apikey,secretkey,member_id,category_id,pashare from db_task_api").Scan(&Data)
-	case "ZMYdb_task_category":
+	case "TKXdb_task_category":
 		db.Raw("select `id`,`name` from db_task_category").Scan(&Data)
-	case "ZMYdb_task_order":
+	case "TKXdb_task_order":
 		db.Raw("select * from db_task_order").Scan(&Data)
 		coin := map[string]interface{}{}
 		for _, v := range Data {

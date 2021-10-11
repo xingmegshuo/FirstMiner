@@ -75,10 +75,10 @@ func CrawRun() {
 					time.Sleep(time.Millisecond * 200)
 					if !stratHttp {
 						stratHttp = true
-						craw()
+						// craw()
 						if count%20 == 0 {
-							xhttp("https://dapi.binance.com/dapi/v1/ticker/24hr", "ZMYCOINF")
-							xhttp("https://fapi.binance.com/fapi/v1/ticker/24hr", "ZMYUSDF")
+							// 	xhttp("https://dapi.binance.com/dapi/v1/ticker/24hr", "ZMYCOINF")
+							// 	xhttp("https://fapi.binance.com/fapi/v1/ticker/24hr", "ZMYUSDF")
 							crawAccount()
 						}
 						isOver = true

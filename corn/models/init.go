@@ -11,6 +11,7 @@ package model
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"time"
 	logs "zmyjobs/corn/logs"
 
@@ -59,8 +60,8 @@ func init() {
 	)
 
 	// server
-	serverDB, _ := sql.Open("mysql", "zmy:com1Chybay!@tcp(localhost:3306)/corn?charset=utf8mb4&parseTime=True&loc=Local")
-	dsn := "ot_ptus209:2xHwO9bksHH@tcp(rm-j6cnwil9l9701sw92.mysql.rds.aliyuncs.com:3306)/ot_zhimayi?charset=utf8mb4&parseTime=True&loc=Local"
+	serverDB, _ := sql.Open("mysql", "zmy:com1Chybay!@tcp(localhost:3306)/tkx?charset=utf8mb4&parseTime=True&loc=Local")
+	dsn := "ot_ptus209:2xHwO9bksHH@tcp(rm-j6cnwil9l9701sw92.mysql.rds.aliyuncs.com:3306)/ot_toukuangxia?charset=utf8mb4&parseTime=True&loc=Local"
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "172.31.213.84:6379",
 		Password: "lookupld",
@@ -82,7 +83,8 @@ func init() {
 		PrepareStmt: true,
 	})
 	if e != nil {
-		panic("failed to connect user database")
+		fmt.Println(e)
+		// panic("failed to connect user database")
 	}
 	UserDB = userDB
 	DB = db
