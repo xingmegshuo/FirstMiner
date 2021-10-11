@@ -33,7 +33,7 @@ var l sync.Mutex
 func exitHandle() {
 	<-exitChan
 	fmt.Println("接收到信号")
-	
+
 	l.Lock()
 	job.Exit()
 	l.Unlock()

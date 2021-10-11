@@ -55,6 +55,7 @@ type User struct {
 	Arg       string  // 策略参数
 	Symbol    string  // 交易对参数
 	Future    int     // 期货标识
+	Pashare   string  // okex 自定义
 }
 
 // NewUser 从缓存获取如果数据库不存在就添加
@@ -67,7 +68,7 @@ func NewUser() {
 		result := DB.Raw("select * from users where object_id = ?", order["id"]).Scan(&u)
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) || result.RowsAffected == 0 {
 			// 符合条件的订单
-			b, cate, api, sec := GetApiConfig(order["customer_id"], order["category_id"])
+			b, cate, api, pashare, sec := GetApiConfig(order["customer_id"], order["category_id"])
 			if b && order["status"].(float64) < 3 {
 				// 数据库查找存在与否
 				// log.Println("新建用户:", order["id"])
@@ -79,16 +80,14 @@ func NewUser() {
 					Name:     order["task_coin_name"].(string),
 					IsRun:    -1,
 					Strategy: parseInput(order),
-					// MinPrice: order["price_stop"].(string),
-					// MaxPrice: order["price_add"].(string),
-					Money:  GetAccount(order["customer_id"].(float64)),
-					Number: order["num"].(float64),
-					// Total:    order["hold_num"].(string),
-					Type:   order["frequency"].(float64),
-					Status: 1,
-					Base:   0,
-					Custom: order["customer_id"].(float64),
-					Future: int(order["coin_type"].(float64)),
+					Money:    GetAccount(order["customer_id"].(float64)),
+					Number:   order["num"].(float64),
+					Type:     order["frequency"].(float64),
+					Status:   1,
+					Base:     0,
+					Custom:   order["customer_id"].(float64),
+					Future:   int(order["coin_type"].(float64)),
+					Pashare:  pashare,
 				}
 				u = UpdateUser(u)
 				result = DB.Exec("select id from users where object_id = ?", order["id"])
@@ -155,12 +154,12 @@ func NewUser() {
 				UpdateBase(u.ObjectId)
 				AddRun(u.ObjectId, u.RunCount)
 			}
-			if UpdateStatus(u.ID) == int64(99) && UpdateRun(u.ID) == 2 && u.RealGrids == "***" && u.Base == 0 {
-				u.IsRun = -1
-				u.Update()
-				// u = model.UpdateUser(u)
-				log.Printf("用户%v重新开始;单数:%v;状态:%v;is_run:%v;实际买入信息:%v", u.ObjectId, u.Base, u.Status, u.IsRun, u.RealGrids)
-			}
+			// if UpdateStatus(u.ID) == int64(99) && UpdateRun(u.ID) == 2 && u.RealGrids == "***" && u.Base == 0 {
+			// u.IsRun = -1
+			// u.Update()
+			// u = model.UpdateUser(u)
+			// log.Printf("用户%v重新开始;单数:%v;状态:%v;is_run:%v;实际买入信息:%v", u.ObjectId, u.Base, u.Status, u.IsRun, u.RealGrids)
+			// }
 		}
 		mutex.Unlock()
 	}
@@ -228,11 +227,12 @@ func parseInput(order map[string]interface{}) string {
 }
 
 // GetApiConfig 获取用户设置的平台分类及秘钥
-func GetApiConfig(memberid interface{}, category interface{}) (bool, string, string, string) {
+func GetApiConfig(memberid interface{}, category interface{}) (bool, string, string, string, string) {
 	var (
-		name   string
-		apiKey string
-		secret string
+		name    string
+		apiKey  string
+		secret  string
+		pashare string
 	)
 
 	api := StringMap(GetCache("ZMYdb_task_api"))
@@ -248,12 +248,15 @@ func GetApiConfig(memberid interface{}, category interface{}) (bool, string, str
 		if a["category_id"] == category && a["member_id"] == memberid {
 			apiKey = a["apikey"].(string)
 			secret = a["secretkey"].(string)
+			if a["pashare"] != nil {
+				pashare = a["pashare"].(string)
+			}
 		}
 	}
 	if name != "" && apiKey != "" && secret != "" {
-		return true, name, apiKey, secret
+		return true, name, apiKey, pashare, secret
 	} else {
-		return false, "", "", ""
+		return false, "", "", "", ""
 	}
 }
 
@@ -298,7 +301,7 @@ func LoadSymbols(name string) []map[string]interface{} {
 	}
 }
 
-// SourceStrategy 生成并写入表
+// SourceStrategy 生成策略内容并写入表
 func SourceStrategy(u User, load bool) (*[]Grid, error) {
 	if data, ok := LoadStrategy(u); ok && !load {
 		return data, nil
