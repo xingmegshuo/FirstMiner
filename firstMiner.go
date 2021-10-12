@@ -37,7 +37,7 @@ func exitHandle() {
 	l.Lock()
 	job.Exit()
 	l.Unlock()
-	logs.NoneLog()
+	logs.EndLog()
 	logs.Log.Info("退出程序")
 
 	defer job.Exit()
@@ -52,7 +52,7 @@ func exitHandle() {
  *@return       : / / ``
  */
 func main() {
-	logs.EndLog()
+	logs.NoneLog()
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	logs.Log.Println("what fuck")
 	exitChan = make(chan os.Signal)
