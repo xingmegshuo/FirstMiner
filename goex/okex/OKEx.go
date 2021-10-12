@@ -67,7 +67,6 @@ func (ok *OKEx) DoRequest(httpMethod, uri, reqBody string, response interface{})
 		return err
 	} else {
 		// logger.Log.Debug(string(resp))
-		// fmt.Println(string(resp))
 		json.Unmarshal(resp, &response)
 		return nil
 	}

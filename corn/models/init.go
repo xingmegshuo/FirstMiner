@@ -11,7 +11,6 @@ package model
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 	logs "zmyjobs/corn/logs"
 
@@ -67,6 +66,7 @@ func init() {
 		Password: "lookupld",
 		DB:       0,
 	})
+
 	serverDB.SetMaxIdleConns(128) //设置最大连接数
 	serverDB.SetMaxOpenConns(128)
 	db, err := gorm.Open(mysql.New(mysql.Config{Conn: serverDB}), &gorm.Config{Logger: newLogger, PrepareStmt: true})
@@ -83,8 +83,7 @@ func init() {
 		PrepareStmt: true,
 	})
 	if e != nil {
-		fmt.Println(e)
-		// panic("failed to connect user database")
+		panic("failed to connect user database")
 	}
 	UserDB = userDB
 	DB = db

@@ -235,16 +235,14 @@ func GetApiConfig(memberid interface{}, category interface{}) (bool, string, str
 		pashare string
 	)
 
-	api := StringMap(GetCache("ZMYdb_task_api"))
-	Category := StringMap(GetCache("ZMYdb_task_category"))
-	// fmt.Println(api, Category)
+	api := StringMap(GetCache("TKXdb_task_api"))
+	Category := StringMap(GetCache("TKXdb_task_category"))
 	for _, value := range Category {
 		if value["id"] == category {
 			name = value["name"].(string)
 		}
 	}
 	for _, a := range api {
-		// fmt.Println(fmt.Sprintf("%V,%V", a["member_id"], memberid))
 		if a["category_id"] == category && a["member_id"] == memberid {
 			apiKey = a["apikey"].(string)
 			secret = a["secretkey"].(string)

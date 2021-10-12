@@ -73,7 +73,7 @@ func NewHttpRequestWithFasthttp(client *http.Client, reqMethod, reqUrl, postData
 }
 
 func NewHttpRequest(client *http.Client, reqType string, reqUrl string, postData string, requstHeaders map[string]string) ([]byte, error) {
-	logger.Log.Debugf("[%s] request url: %s", reqType, reqUrl)
+	// logger.Log.Debugf("[%s] request url: %s", reqType, reqUrl)
 	lib := os.Getenv("HTTP_LIB")
 	if lib == "fasthttp" {
 		return NewHttpRequestWithFasthttp(client, reqType, reqUrl, postData, requstHeaders)
@@ -153,7 +153,6 @@ func HttpGet3(client *http.Client, reqUrl string, headers map[string]string) ([]
 	if err != nil {
 		return nil, err
 	}
-	//println(string(respData))
 	var bodyDataMap []interface{}
 	err = json.Unmarshal(respData, &bodyDataMap)
 	if err != nil {
