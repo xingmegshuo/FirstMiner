@@ -51,7 +51,7 @@ func NewApi(c *Config) (cli goex.API) {
     case "币安":
         // api.BuildFuture(goex.BINANCE) 期货api
         cli = api.Build(goex.BINANCE) //创建现货api实例
-    case "ok":
+    case "OKex":
         api = api.ApiPassphrase(c.Passhare)
         cli = api.Build(goex.OKEX)
     default:

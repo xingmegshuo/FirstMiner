@@ -26,7 +26,7 @@ func TestCraw(t *testing.T) {
         }
     }()
     for {
-        ;
+
     }
 
     go Begin()
@@ -47,5 +47,6 @@ func TestCraw(t *testing.T) {
 // 抓取okex 行情信息
 func TestOkex(t *testing.T) {
     // CrawOkSpot()
-    CrawOkSwap()
+    // CrawOkSwap()
+    crawAccount()
 }
