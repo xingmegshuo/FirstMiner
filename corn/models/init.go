@@ -58,7 +58,7 @@ func init() {
 		},
 	)
 	// localHost
-	serverDB, _ := sql.Open("mysql", "root:528012@tcp(localhost:3306)/corn?charset=utf8mb4&parseTime=True&loc=Local")
+	serverDB, _ := sql.Open("mysql", "root:528012@tcp(localhost:3306)/tkx?charset=utf8mb4&parseTime=True&loc=Local")
 	dsn := "root:528012@tcp(127.0.0.1:3306)/ot_zhimayi?charset=utf8mb4&parseTime=True&loc=Local"
 	// rdb := redis.NewClient(&redis.Options{
 	// 	Addr:     "8.210.86.77:6379",
