@@ -293,7 +293,7 @@ func (bs *BinanceSwap) GetFutureUserinfo(currencyPair ...CurrencyPair) (*FutureA
 	for _, v := range balances {
 		vv := v.(map[string]interface{})
 		if ToFloat64(vv["marginBalance"]) > 0 {
-=			currency := NewCurrency(vv["asset"].(string), "").AdaptBccToBch()
+			currency := NewCurrency(vv["asset"].(string), "").AdaptBccToBch()
 			acc.FutureSubAccounts[currency] = FutureSubAccount{
 				Currency:      currency,
 				AccountRights: ToFloat64(vv["marginBalance"]),
