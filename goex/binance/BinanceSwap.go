@@ -31,6 +31,7 @@ func NewBinanceSwap(config *APIConfig) *BinanceSwap {
 			baseUrl:    config.Endpoint,
 			accessKey:  config.ApiKey,
 			apiV1:      config.Endpoint + "/fapi/v1/",
+			apiV2:      config.Endpoint + "fapi/v2/",
 			secretKey:  config.ApiSecretKey,
 			httpClient: config.HttpClient,
 		},
@@ -86,7 +87,6 @@ func (bs *BinanceSwap) ChangeLever(currency CurrencyPair, contractType string) b
 	} else {
 		uri := bs.apiV1 + "leverage"
 		symbol := currency.ToSymbol("")
-		// fmt.Println(symbol)
 		data := url.Values{}
 		data.Set("symbol", symbol)
 		data.Set("leverage", strconv.Itoa(bs.f.Level))
@@ -94,11 +94,9 @@ func (bs *BinanceSwap) ChangeLever(currency CurrencyPair, contractType string) b
 
 		_, err := HttpPostForm2(bs.httpClient, uri, data,
 			map[string]string{"X-MBX-APIKEY": bs.f.apikey})
-		// fmt.Println(err, bs.f.Level)
 		if err == nil {
 			return true
 		}
-		fmt.Println(err)
 	}
 	return false
 }
@@ -278,7 +276,6 @@ func (bs *BinanceSwap) GetFutureUserinfo(currencyPair ...CurrencyPair) (*FutureA
 	if err != nil {
 		return nil, err
 	}
-	// fmt.Println(acc)
 	// var acc = &FutureAccount{}
 	// acc.FutureSubAccounts = map[Currency]FutureSubAccount{}
 
@@ -296,7 +293,6 @@ func (bs *BinanceSwap) GetFutureUserinfo(currencyPair ...CurrencyPair) (*FutureA
 	for _, v := range balances {
 		vv := v.(map[string]interface{})
 		if ToFloat64(vv["marginBalance"]) > 0 {
-			// fmt.Println(vv)
 			currency := NewCurrency(vv["asset"].(string), "").AdaptBccToBch()
 			acc.FutureSubAccounts[currency] = FutureSubAccount{
 				Currency:      currency,
@@ -548,7 +544,6 @@ func (bs *BinanceSwap) GetFuturePosition(currencyPair CurrencyPair, contractType
 	path := bs.apiV1 + "positionRisk?" + params.Encode()
 
 	result, err := HttpGet3(bs.httpClient, path, map[string]string{"X-MBX-APIKEY": bs.accessKey})
-
 	if err != nil {
 		return nil, err
 	}
@@ -645,7 +640,6 @@ func (bs *BinanceSwap) GetFutureOrder(orderId string, currencyPair CurrencyPair,
 	}
 
 	currencyPair1 := bs.adaptCurrencyPair(currencyPair)
-	// fmt.Println(currencyPair1)
 	params := url.Values{}
 	params.Set("symbol", currencyPair1.ToSymbol(""))
 	// params.Set("orderId", orderId)
@@ -661,7 +655,6 @@ func (bs *BinanceSwap) GetFutureOrder(orderId string, currencyPair CurrencyPair,
 	var orders []*FutureOrder
 	ordId, _ := strconv.Atoi(orderId)
 	for _, info := range result {
-		// fmt.Println(info)
 		order := &FutureOrder{}
 		_ord := info.(map[string]interface{})
 

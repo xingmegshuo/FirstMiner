@@ -161,6 +161,7 @@ type Binance struct {
 	secretKey  string
 	baseUrl    string
 	apiV1      string
+	apiV2      string
 	apiV3      string
 	httpClient *http.Client
 	timeOffset int64 //nanosecond
@@ -168,7 +169,7 @@ type Binance struct {
 }
 
 func (bn *Binance) buildParamsSigned(postForm *url.Values) error {
-	postForm.Set("recvWindow", "60000")
+	postForm.Set("recvWindow", "50000")
 	tonce := strconv.FormatInt(time.Now().UnixNano()+bn.timeOffset, 10)[0:13]
 	postForm.Set("timestamp", tonce)
 	payload := postForm.Encode()
@@ -193,6 +194,7 @@ func NewWithConfig(config *APIConfig) *Binance {
 	bn := &Binance{
 		baseUrl:    config.Endpoint,
 		apiV1:      config.Endpoint + "/api/v1/",
+		apiV2:      config.Endpoint + "api/v2/",
 		apiV3:      config.Endpoint + "/api/v3/",
 		accessKey:  config.ApiKey,
 		secretKey:  config.ApiSecretKey,
@@ -330,7 +332,6 @@ func (bn *Binance) placeOrder(amount, price string, pair CurrencyPair, orderType
 	}
 
 	bn.buildParamsSigned(&params)
-	// fmt.Println(params)
 	resp, err := HttpPostForm2(bn.httpClient, path, params,
 		map[string]string{"X-MBX-APIKEY": bn.accessKey})
 	if err != nil {
