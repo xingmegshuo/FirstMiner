@@ -533,6 +533,7 @@ func GetUserHold(id float64, cate float64, t float64) (data []map[string]interfa
 				}
 			}
 		}
+		fmt.Println(err)
 		return
 	} else if t == 1 && b {
 		c := grid.NewEx(&model.SymbolCategory{Category: name, Key: key, Secret: secret, PricePrecision: 8, AmountPrecision: 8, Future: true})
