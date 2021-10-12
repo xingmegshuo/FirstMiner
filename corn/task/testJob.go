@@ -495,10 +495,11 @@ func crawAccount() {
 			},
 		}
 		str, _ := json.Marshal(&data)
+		log.Printf("用户:%v;数据:%v", id, string(str))
 		if data["1"].(map[string][]map[string]interface{})["spot"] != nil || data["2"].(map[string][]map[string]interface{})["spot"] != nil || data["2"].(map[string][]map[string]interface{})["B"] != nil || data["2"].(map[string][]map[string]interface{})["U"] != nil {
-			model.ListCacheRm("ZMYUSERS", model.ParseFloatString(id), model.ParseFloatString(id))
+			model.ListCacheRm("TKXUSERS", model.ParseFloatString(id), model.ParseFloatString(id))
 		}
-		model.ListCacheAddOne("ZMYUSERS", &redis.Z{
+		model.ListCacheAddOne("TKXUSERS", &redis.Z{
 			Score:  id,
 			Member: string(str),
 		})
