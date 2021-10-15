@@ -43,7 +43,8 @@ func (ok *OKExSpot) GetAccount() (*Account, error) {
 	if err != nil && response.BizWarmTips.Code == "0" {
 		return nil, err
 	}
-	acc := Account{}
+	acc := new(Account)
+	acc.SubAccounts = make(map[Currency]SubAccount, 6)
 	for _, itm := range response.Acc[0].Details {
 		if ToFloat64(itm.Amount) > 0 {
 			currency := NewCurrency(itm.Ccy, "")
@@ -53,7 +54,7 @@ func (ok *OKExSpot) GetAccount() (*Account, error) {
 			}
 		}
 	}
-	return &acc, nil
+	return acc, nil
 }
 
 type PlaceOrderParam struct {
