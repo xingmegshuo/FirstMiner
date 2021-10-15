@@ -1,13 +1,13 @@
 package okex
 
 import (
-	. "zmyjobs/goex"
-	"zmyjobs/goex/internal/logger"
 	"fmt"
 	"net/url"
 	"sort"
 	"strings"
 	"time"
+	. "zmyjobs/goex"
+	"zmyjobs/goex/internal/logger"
 
 	"github.com/go-openapi/errors"
 )
@@ -28,34 +28,32 @@ type OKExSpot struct {
 //    ...]
 
 func (ok *OKExSpot) GetAccount() (*Account, error) {
-	urlPath := "/api/spot/v3/accounts"
-	var response []struct {
-		Frozen    float64 `json:"frozen,string"`
-		Hold      float64 `json:"hold,string"`
-		Currency  string
-		Balance   float64 `json:"balance,string"`
-		Available float64 `json:"available,string"`
-		Holds     float64 `json:"holds,string"`
+	urlPath := "/api/v5/account/balance"
+	var response struct {
+		BizWarmTips
+		Acc []struct {
+			Details []struct {
+				Ccy    string `json:"ccy"`
+				Amount string `json:"cashBal"`
+			} `json:"details"`
+		} `json:"data"`
 	}
 
 	err := ok.OKEx.DoRequest("GET", urlPath, "", &response)
-	if err != nil {
+	if err != nil && response.BizWarmTips.Code == "0" {
 		return nil, err
 	}
-
-	account := &Account{
-		SubAccounts: make(map[Currency]SubAccount, 2)}
-
-	for _, itm := range response {
-		currency := NewCurrency(itm.Currency, "")
-		account.SubAccounts[currency] = SubAccount{
-			Currency:     currency,
-			ForzenAmount: itm.Hold,
-			Amount:       itm.Available,
+	acc := Account{}
+	for _, itm := range response.Acc[0].Details {
+		if ToFloat64(itm.Amount) > 0 {
+			currency := NewCurrency(itm.Ccy, "")
+			acc.SubAccounts[currency] = SubAccount{
+				Currency: currency,
+				Amount:   ToFloat64(itm.Amount),
+			}
 		}
 	}
-
-	return account, nil
+	return &acc, nil
 }
 
 type PlaceOrderParam struct {
