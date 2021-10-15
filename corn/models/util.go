@@ -157,7 +157,7 @@ func MakeStrategy(u User) (*[]Grid, error) {
 			}
 			currentGrid.TotalBuy = currentGrid.AmountBuy
 		}
-		if symbol.Category == "OKex" && u.Future == 1 {
+		if symbol.Category == "OKex" && u.Future > 0 {
 			if symbol.MinTotal.Cmp(currentGrid.AmountBuy) != -1 {
 				currentGrid.AmountBuy = symbol.MinAmount.Mul(symbol.MinTotal)
 				currentGrid.Mesure = symbol.MinAmount
