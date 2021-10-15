@@ -235,7 +235,7 @@ type OrderResponse struct {
 	FilledSize     string `json:"filled_size"`
 	FilledNotional string `json:"filled_notional"`
 	PriceAvg       string `json:"price_avg"`
-	State          int    `json:"state,string"`
+	State          string `json:"state"`
 	Fee            string `json:"fee"`
 	OrderType      string `json:"ordType"`
 	Timestamp      string `json:"uTime"`
@@ -248,7 +248,6 @@ func (ok *OKExSpot) adaptOrder(response OrderResponse) *Order {
 
 		AvgPrice:   ToFloat64(response.PriceAvg),
 		DealAmount: ToFloat64(response.FilledSize),
-		Status:     ok.adaptOrderState(response.State),
 		Fee:        ToFloat64(response.Fee)}
 
 	switch response.Side {
@@ -295,6 +294,9 @@ func (ok *OKExSpot) GetOneOrder(orderId string, currency CurrencyPair) (*Order, 
 	if err != nil || len(response.Res) == 0 {
 		return nil, err
 	}
+	if response.Res[0].State != "filled" {
+		return nil, errors.New(301, "还没成交")
+	}
 	var slide TradeSide
 	switch response.Res[0].OrderType {
 	case "market":
@@ -321,6 +323,7 @@ func (ok *OKExSpot) GetOneOrder(orderId string, currency CurrencyPair) (*Order, 
 		OrderTime:  ToInt(response.Res[0].Timestamp),
 		CashAmount: ToFloat64(response.Res[0].Size) * ToFloat64(response.Res[0].Price),
 		Side:       slide,
+		Status:     2,
 	}, nil
 }
 
