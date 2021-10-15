@@ -10,7 +10,6 @@ package grid
 
 import (
 	"encoding/json"
-	"fmt"
 	model "zmyjobs/corn/models"
 	util "zmyjobs/corn/uti"
 	"zmyjobs/goex"
@@ -257,8 +256,7 @@ func (c *Cliex) Exchanges(amount decimal.Decimal, price decimal.Decimal, name st
 		case SellM:
 			order, err = c.Ex.MarketSell(amount.String(), price.String(), c.Currency)
 		}
-		fmt.Println(order, err, name)
-		if err == nil {
+		if err == nil && order != nil {
 			return NewFromOrder(order), err
 		}
 	}
