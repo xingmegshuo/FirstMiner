@@ -292,7 +292,7 @@ func (ok *OKExSpot) GetOneOrder(orderId string, currency CurrencyPair) (*Order, 
 	}
 
 	err := ok.OKEx.DoRequest("GET", urlPath, "", &response)
-	if err != nil {
+	if err != nil && len(response.Res) > 0 {
 		return nil, err
 	}
 	var slide TradeSide
