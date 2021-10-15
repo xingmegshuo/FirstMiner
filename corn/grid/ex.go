@@ -297,7 +297,7 @@ func (c *Cliex) SearchOrder(orderId string) (bool, bool, *OneOrder) {
 			o = NewFromOrder(order)
 		}
 	}
-	if err == nil {
+	if err == nil && o != nil {
 		if o.Status == 2 {
 			return true, true, o
 		} else {
