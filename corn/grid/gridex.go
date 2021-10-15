@@ -435,11 +435,11 @@ func (t *ExTrader) WaitBuy(price decimal.Decimal, amount decimal.Decimal, rate f
 		log.Printf("买入错误: %d, err: %s", t.base, err)
 		return err
 	} else {
-		if o.ClientId != "" && t.goex.symbol.Category != "OKex" {
-			t.ParseOrder(o)
-			t.last = decimal.NewFromFloat(o.Price)
-			return nil
-		}
+		// if o.ClientId != "" && t.goex.symbol.Category != "OKex" {
+		// 	t.ParseOrder(o)
+		// 	t.last = decimal.NewFromFloat(o.Price)
+		// 	return nil
+		// }
 		if t.WaitOrder(o.OrderId, o.ClientId) {
 			return nil
 		} else {
