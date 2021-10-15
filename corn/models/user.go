@@ -60,7 +60,7 @@ type User struct {
 
 // NewUser 从缓存获取如果数据库不存在就添加
 func NewUser() {
-	orders := StringMap(GetCache("ZMYdb_task_order"))
+	orders := StringMap(GetCache("TKXdb_task_order"))
 	for _, order := range orders {
 		// log.Println("新建用户检测:", order["id"], len(orders))
 		mutex.Lock()

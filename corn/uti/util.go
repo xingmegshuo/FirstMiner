@@ -9,19 +9,19 @@
 package util
 
 import (
-    "encoding/json"
-    "fmt"
-    "io/ioutil"
-    "net/http"
-    "os"
-    "strings"
-    "time"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 
-    "zmyjobs/goex"
-    "zmyjobs/goex/builder"
+	"zmyjobs/goex"
+	"zmyjobs/goex/builder"
 
-    "github.com/shopspring/decimal"
-    "golang.org/x/net/proxy"
+	"github.com/shopspring/decimal"
+	"golang.org/x/net/proxy"
 )
 
 // Config 创建client需要的配置Struct
@@ -51,7 +51,7 @@ func NewApi(c *Config) (cli goex.API) {
     case "币安":
         // api.BuildFuture(goex.BINANCE) 期货api
         cli = api.Build(goex.BINANCE) //创建现货api实例
-    case "ok":
+    case "OKex":
         api = api.ApiPassphrase(c.Passhare)
         cli = api.Build(goex.OKEX)
     default:

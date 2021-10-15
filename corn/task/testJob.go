@@ -488,20 +488,21 @@ func crawAccount() {
 			"1": map[string][]map[string]interface{}{
 				"spot": GetUserHold(id, 1, 0),
 			},
-			"2": map[string][]map[string]interface{}{
-				"spot": GetUserHold(id, 2, 0),
-				"B":    GetUserHold(id, 2, 1),
-				"U":    GetUserHold(id, 2, 2),
-			},
-			"3": map[string][]map[string]interface{}{
-				"U": GetUserHold(id, 3, 1),
-			},
+			// "2": map[string][]map[string]interface{}{
+			// 	"spot": GetUserHold(id, 2, 0),
+			// 	"B":    GetUserHold(id, 2, 1),
+			// 	"U":    GetUserHold(id, 2, 2),
+			// },
+			// "3": map[string][]map[string]interface{}{
+			// 	"U": GetUserHold(id, 3, 1),
+			// },
 		}
+		fmt.Println(id, "hhhh")
 		str, _ := json.Marshal(&data)
-		if data["1"].(map[string][]map[string]interface{})["spot"] != nil || data["2"].(map[string][]map[string]interface{})["spot"] != nil || data["2"].(map[string][]map[string]interface{})["B"] != nil || data["2"].(map[string][]map[string]interface{})["U"] != nil {
-			model.ListCacheRm("ZMYUSERS", model.ParseFloatString(id), model.ParseFloatString(id))
-		}
-		model.ListCacheAddOne("ZMYUSERS", &redis.Z{
+		fmt.Println(string(str))
+		model.ListCacheRm("TKXUSERS", model.ParseFloatString(id), model.ParseFloatString(id))
+
+		model.ListCacheAddOne("TKXUSERS", &redis.Z{
 			Score:  id,
 			Member: string(str),
 		})
