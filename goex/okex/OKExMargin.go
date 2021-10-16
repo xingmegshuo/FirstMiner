@@ -2,9 +2,9 @@ package okex
 
 import (
 	"errors"
-	. "zmyjobs/goex"
 	"fmt"
 	"strings"
+	. "zmyjobs/goex"
 )
 
 type OKExMargin struct {
@@ -122,7 +122,6 @@ func (ok *OKExMargin) PlaceOrder(ord *Order) (*Order, error) {
 		ClientOid:     ok.UUID(),
 		InstrumentId:  ord.Currency.AdaptUsdToUsdt().ToLower().ToSymbol("-"),
 		Type:          ord.Type,
-		OrderType:     ord.OrderType,
 		MarginTrading: "2"}
 
 	var response PlaceOrderResponse
