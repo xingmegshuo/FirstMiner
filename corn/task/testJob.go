@@ -435,7 +435,7 @@ func CrawOkSpot() {
 				// fmt.Println(symbol, util.ToMySymbol(symbol))
 				var id interface{}
 				if name := util.ToMySymbol(symbol); name != "none" && name[len(name)-4:] == "USDT" {
-					model.UserDB.Raw("select id from db_task_coin where coin_type = ? and name = ?  and category_id = ?", 0, name, 5).Scan(&id)
+					model.UserDB.Raw("select id from db_task_coin where coin_type = ? and name = ?  and category_id = ?", 0, name, 3).Scan(&id)
 					// fmt.Println(id, symbol)
 					if id != nil {
 						var (
