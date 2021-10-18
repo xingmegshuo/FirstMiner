@@ -262,11 +262,17 @@ func (t *ExTrader) ParseOrder(order *OneOrder) {
 	log.Printf("订单成功--- 价格:%v  数量: %v  手续费: %v 成交额: %v 订单号: %v", order.Price, order.Amount, order.Fee, order.Cash, order.OrderId)
 	if b, ok := t.SellOrder[order.OrderId]; ok {
 		log.Printf("当前单数:%v,卖出单数:%v;%v", t.base, b, t.SellOrder)
-		if t.goex.symbol.Category == "OKex" && t.u.Future > 0 {
+		if t.goex.symbol.Category == "OKex" && t.u.Future == 1 {
 			if b == 0 {
 				t.RealGrids[b].AmountSell = t.CountHold().Mul(price)
 			} else {
 				t.RealGrids[b].AmountSell = t.RealGrids[b].AmountBuy.Mul(price)
+			}
+		} else if t.goex.symbol.Category == "OKex" && t.u.Future == 2 {
+			if b == 0 {
+				t.RealGrids[b].AmountSell = t.CountHold().Add(decimal.NewFromFloat(order.Cash))
+			} else {
+				t.RealGrids[b].AmountSell = t.RealGrids[b].AmountBuy.Add(decimal.NewFromFloat(order.Cash))
 			}
 		} else {
 			sellMoney := price.Mul(amount).Abs().Sub(fee)
