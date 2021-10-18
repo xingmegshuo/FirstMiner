@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 	model "zmyjobs/corn/models"
+	"zmyjobs/goex"
 	// "github.com/nntaoli-project/goex"
 )
 
@@ -165,30 +166,31 @@ func TestFutureAccount(t *testing.T) {
 	// ok 模拟盘 : b3f3f6e2-7243-4602-bdaf-2de3fee7564f   CF67295C5D9450ED625206EB04285D52
 	//    ok 实盘 : eb861d6c-711c-4e16-a656-48839b5b1dd1  90775A06A926AC9AFDAA657C2AF06ED1
 	bian := model.SymbolCategory{
-		Key:     "b3f2de3fee7564f3f6e2-7243-4602-bdaf-",
-		Secret:  "CF67295C5D9450ED625206EB04285D52",
-		Pashare: "528012",
-		Symbol:  "ADA/USDT",
+		Key:     "bb12b02c-d799-44c2-85d4-97291d3d9c5a",
+		Secret:  "B5682599A18A74EBC724BBB0FD13AE69",
+		Pashare: "Yy123456",
+		Symbol:  "BTC/USDT",
 		// Host:            "https://fapi.binace.com",
-		BaseCurrency:    "ADA",
+		BaseCurrency:    "BTC",
 		QuoteCurrency:   "USDT",
 		AmountPrecision: 2,
 		PricePrecision:  6,
 		Category:        "OKex",
 		Label:           "u20",
 		Future:          true,
-		Lever:           60,
+		Lever:           19,
 	}
 	// fmt.Println(bian)
 	cli := NewEx(&bian)
 	fmt.Println(cli.GetAccount())
-	// b := goex.NewCurrencyPair2(bian.Symbol)
+
+	b := goex.NewCurrencyPair2(bian.Symbol)
 	// fmt.Println("获取账户信息:")
 	// fmt.Println(cli.GetAccount())
 
-	// fmt.Println(b.String())
+	fmt.Println(b.String())
 	// fmt.Println("修改交易对杠杆倍数:")
-	// fmt.Println(cli.Future.ChangeLever(b, goex.SWAP_USDT_CONTRACT))
+	fmt.Println(cli.Future.ChangeLever(b, goex.SWAP_USDT_CONTRACT))
 
 	// fmt.Println(cli.Currency)
 	// cl := util.Config{Name: "币安"}
