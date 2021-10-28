@@ -281,6 +281,8 @@ func (t *ExTrader) ParseOrder(order *OneOrder) {
 			// 币本位记录卖出币种数量
 			if t.u.Future == 2 || t.u.Future == 4 {
 				t.RealGrids[b].AmountSell = decimal.NewFromFloat(order.Cash)
+			} else if t.u.Future == 1 || t.u.Future == 3 {
+				t.RealGrids[b].AmountSell = price.Mul(t.CountHold()) // 避免因成交单数分开而影响计算盈利
 			}
 		}
 		t.amount = t.CountHold()
